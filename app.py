@@ -37,12 +37,14 @@ st.subheader(f"📌 Country: {selected_country} ({start_year} to {end_year})")
 st.line_chart(filtered_df.set_index("year")["incidence"])
 
 # Forecasting
-st.subheader("🔮 Forecast for Next 5 Years")
-forecast_df = country_df.rename(columns={"year": "ds", "incidence": "y"})
+st.subheader("🔮 Forecast for Next Years")
+forecast_df = filtered_df.rename(columns={"year": "ds", "incidence": "y"})
 
 model = Prophet()
 model.fit(forecast_df)
-future = model.make_future_dataframe(periods=5, freq="YE")
+forecast_years = st.sidebar.slider("🔮 Forecast how many years ahead?", 1, 10, 5)
+
+future = model.make_future_dataframe(periods=forecast_years, freq="YE")
 forecast = model.predict(future)
 
 # Plot forecast

@@ -1,6 +1,3 @@
-from turtle import st
-
-from app import filtered_df
 from cleandata import get_clean_data
 import matplotlib.pyplot as plt
 
@@ -25,17 +22,14 @@ plt.show()
 from prophet import Prophet
 
 # Prepare data for Prophet
-forecast_df = filtered_df.rename(columns={"year": "ds", "incidence": "y"})
-
+forecast_df = country_df.rename(columns={"year": "ds", "incidence": "y"})
 
 # Fit the model
 model = Prophet()
 model.fit(forecast_df)
-forecast_years = st.sidebar.slider("🔮 Forecast how many years ahead?", 1, 10, 5)
 
 # Create future dates (next 5 years)
-future = model.make_future_dataframe(periods=forecast_years, freq="YE")
-
+future = model.make_future_dataframe(periods=5, freq='YE')
 
 # Predict
 forecast = model.predict(future)
